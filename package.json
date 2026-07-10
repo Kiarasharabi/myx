@@ -1,0 +1,15 @@
+{
+  "name": "live-config-panel",
+  "version": "2.0.0",
+  "description": "پنل کانفیگ زنده (VLESS+WS+TLS با Xray) قابل اجرا روی Railway بدون VPS جداگانه",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

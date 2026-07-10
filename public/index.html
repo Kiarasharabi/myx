@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myx</title>
+  <link href="https://cdn.jsdelivr.net/npm/vazirmatn@33.0.3/Vazirmatn-font-face.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <!-- ============ ورود ============ -->
+  <div class="view login-view" id="loginView">
+    <div class="glass login-box">
+      <div class="logo-badge">🛰️</div>
+      <h1 class="login-title">myx</h1>
+      <p class="muted center">برای مدیریت سرور وارد شوید</p>
+
+      <div class="input-group">
+        <span class="ic">🔒</span>
+        <input id="password" type="password" placeholder="رمز عبور پنل" />
+        <button class="ic-btn" id="togglePass" type="button" title="نمایش رمز">👁</button>
+      </div>
+
+      <button class="btn-primary full" id="loginBtn">ورود</button>
+      <p class="err" id="loginErr"></p>
+      <p class="hint center">رمز در لاگ‌های Railway یا متغیر <code>ADMIN_PASSWORD</code></p>
+    </div>
+  </div>
+
+  <!-- ============ داشبورد ============ -->
+  <div class="view dash-view hidden" id="dashView">
+    <header class="app-header glass">
+      <div class="brand">
+        <span class="logo-badge sm">🛰️</span>
+        <div class="brand-txt">
+          <b>myx</b>
+          <small>VLESS · WebSocket · TLS</small>
+        </div>
+      </div>
+      <button class="btn-ghost" id="logoutBtn">خروج ⎋</button>
+    </header>
+
+    <main class="dash-main">
+      <!-- وضعیت سرور -->
+      <section class="glass hero">
+        <div class="hero-status">
+          <span class="pulse"></span>
+          <div>
+            <div class="muted sm-label">وضعیت سرور</div>
+            <div class="hero-title">فعال و آماده‌ی اتصال</div>
+          </div>
+        </div>
+        <div class="hero-domain">
+          <span class="muted sm-label">دامنه</span>
+          <div class="domain-row">
+            <code id="domainVal">—</code>
+            <button class="ic-btn" id="copyDomain" title="کپی دامنه">⧉</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- آمار -->
+      <section class="stats">
+        <div class="glass stat"><div class="stat-num" id="userCount">0</div><div class="stat-lbl">کاربر</div></div>
+        <div class="glass stat"><div class="stat-num">VLESS</div><div class="stat-lbl">پروتکل</div></div>
+        <div class="glass stat"><div class="stat-num">443</div><div class="stat-lbl">پورت</div></div>
+        <div class="glass stat"><div class="stat-num">WS·TLS</div><div class="stat-lbl">ترنسپورت</div></div>
+      </section>
+
+      <!-- افزودن کاربر -->
+      <section class="glass add-card">
+        <h2 class="section-title">➕ افزودن کاربر</h2>
+        <div class="add-row">
+          <input id="newName" placeholder="نام کاربر (مثلا موبایل من)" />
+          <button class="btn-primary" id="addBtn">افزودن</button>
+        </div>
+      </section>
+
+      <!-- کاربران -->
+      <section class="users-section">
+        <h2 class="section-title">👥 کاربران <span class="badge" id="userBadge">0</span></h2>
+        <div class="users-grid" id="users"></div>
+        <div class="empty-state hidden" id="emptyState">
+          <div class="empty-emoji">🗂️</div>
+          هنوز کاربری ساخته نشده — از بالا یک کاربر اضافه کنید.
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">این پنل خودش پروکسی را روی Railway اجرا می‌کند · کانفیگ‌ها واقعی‌اند</footer>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- قالب کارت کاربر -->
+  <template id="userTpl">
+    <article class="glass user-card">
+      <div class="user-top">
+        <div class="avatar"></div>
+        <div class="user-meta">
+          <b class="user-name"></b>
+          <small class="user-uuid"></small>
+        </div>
+        <button class="del ic-btn" title="حذف">🗑</button>
+      </div>
+      <div class="link-box"><code class="user-link"></code></div>
+      <div class="user-actions">
+        <button class="copy-link btn-soft">📋 لینک</button>
+        <button class="copy-sub btn-soft">🔗 ساب</button>
+        <button class="toggle-qr btn-soft">▦ QR</button>
+      </div>
+      <div class="qr"></div>
+    </article>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
