@@ -181,6 +181,30 @@ code { background: var(--card-2); padding: 2px 7px; border-radius: 6px; directio
 .edit-actions { display: flex; gap: 8px; }
 .edit-actions .btn-primary { flex: 1; }
 
+/* نوار ابزار جستجو/مرتب‌سازی */
+.toolbar { display: flex; gap: 10px; margin-bottom: 14px; }
+.toolbar .search { flex: 1; padding: 10px 14px; background: var(--card-2); border: 1px solid var(--brd); border-radius: var(--radius-sm); color: var(--text); font-family: inherit; font-size: 13.5px; outline: none; transition: 0.2s; }
+.toolbar .search:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.14); }
+.toolbar .sort { padding: 10px 12px; background: var(--card-2); border: 1px solid var(--brd); border-radius: var(--radius-sm); color: var(--text); font-family: inherit; font-size: 13px; outline: none; cursor: pointer; }
+
+/* عملیات سریع در ویرایش */
+.quick-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.quick-row .btn-soft { flex: 1; min-width: 60px; padding: 8px 4px; font-size: 12px; }
+
+/* مودال ابزارها */
+.modal-overlay { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 20px; background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(4px); animation: fadeIn 0.2s ease; }
+.modal { width: 100%; max-width: 440px; padding: 0; overflow: hidden; }
+.modal-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border-bottom: 1px solid var(--brd-2); font-size: 15px; }
+.modal-body { padding: 18px; display: flex; flex-direction: column; gap: 18px; }
+.tool-sec h3 { margin: 0 0 10px; font-size: 14px; }
+.tool-sec .small { font-size: 11px; margin: 0 0 10px; line-height: 1.8; }
+.row2 { display: flex; gap: 8px; }
+.row2 input { flex: 1; padding: 10px 12px; background: var(--card-2); border: 1px solid var(--brd); border-radius: 10px; color: var(--text); font-family: inherit; font-size: 13.5px; outline: none; }
+.row2 input:focus { border-color: var(--blue); }
+.row2 .btn-soft { flex: 1; }
+.danger-btn { width: 100%; color: var(--red); border-color: rgba(239, 68, 68, 0.4); }
+.danger-btn:hover { background: rgba(239, 68, 68, 0.12); border-color: var(--red); }
+
 .empty-state { text-align: center; color: var(--muted); padding: 40px 20px; border: 1px dashed var(--brd); border-radius: var(--radius); font-size: 14px; }
 .empty-emoji { font-size: 34px; margin-bottom: 10px; }
 .app-footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 24px; }

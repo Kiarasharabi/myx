@@ -37,6 +37,7 @@
       </div>
       <div class="header-actions">
         <button class="icon-btn" id="themeBtn" title="تغییر تم">🌙</button>
+        <button class="icon-btn" id="toolsBtn" title="ابزارها">⚙️</button>
         <button class="btn-ghost" id="logoutBtn">خروج</button>
       </div>
     </header>
@@ -74,11 +75,43 @@
         <h2 class="section-title">👥 کاربران <span class="badge" id="userBadge">0</span>
           <button class="btn-soft copy-all-sub" id="copyAllSub">📋 ساب متنی همه</button>
         </h2>
+        <div class="toolbar">
+          <input id="search" class="search" placeholder="🔍 جستجوی کاربر..." />
+          <select id="sort" class="sort">
+            <option value="new">جدیدترین</option>
+            <option value="name">نام</option>
+            <option value="usage">بیشترین مصرف</option>
+            <option value="expiry">نزدیک‌ترین انقضا</option>
+          </select>
+        </div>
         <div class="users-grid" id="users"></div>
-        <div class="empty-state hidden" id="emptyState"><div class="empty-emoji">🗂️</div>هنوز کاربری نیست.</div>
+        <div class="empty-state hidden" id="emptyState"><div class="empty-emoji">🗂️</div>کاربری یافت نشد.</div>
       </section>
     </main>
     <footer class="app-footer">MYX-PANEL · پروکسی زنده روی Railway</footer>
+  </div>
+
+  <!-- مودال ابزارها -->
+  <div class="modal-overlay hidden" id="toolsModal">
+    <div class="card modal">
+      <div class="modal-head"><b>⚙️ ابزارها</b><button class="icon-btn" id="toolsClose">✕</button></div>
+      <div class="modal-body">
+        <div class="tool-sec">
+          <h3>🔑 تغییر رمز پنل</h3>
+          <div class="row2"><input id="newPass" type="password" placeholder="رمز جدید" /><button class="btn-primary" id="savePass">تغییر</button></div>
+        </div>
+        <div class="tool-sec">
+          <h3>💾 پشتیبان‌گیری</h3>
+          <div class="row2"><button class="btn-soft" id="backupBtn">⬇ دانلود بکاپ</button><button class="btn-soft" id="restoreBtn">⬆ بازیابی از فایل</button></div>
+          <input type="file" id="restoreFile" accept="application/json" hidden />
+        </div>
+        <div class="tool-sec">
+          <h3>🔄 چرخش مسیر مخفی</h3>
+          <p class="muted small">با این کار مسیر WS عوض می‌شود و همه‌ی کانفیگ‌های فعلی باطل می‌شوند؛ باید دوباره از پنل گرفته شوند.</p>
+          <button class="btn-soft danger-btn" id="rotateBtn">ساخت مسیر جدید</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -107,12 +140,21 @@
       <div class="user-actions">
         <button class="copy-link btn-soft">📋 کانفیگ</button>
         <button class="copy-sub btn-soft">🔗 ساب</button>
+        <button class="copy-suburl btn-soft">🌐 ساب‌URL</button>
         <button class="toggle-qr btn-soft">▦ QR</button>
+        <button class="download-qr btn-soft">⬇ QR</button>
         <button class="toggle-edit btn-soft">✎ ویرایش</button>
       </div>
       <div class="qr"></div>
 
       <div class="edit">
+        <div class="quick-row">
+          <button class="q-ext7 btn-soft">+۷ روز</button>
+          <button class="q-ext30 btn-soft">+۳۰ روز</button>
+          <button class="q-add10 btn-soft">+۱۰GB</button>
+          <button class="q-add50 btn-soft">+۵۰GB</button>
+          <button class="q-regen btn-soft">🔄 UUID</button>
+        </div>
         <div class="edit-grid">
           <label>روز (۰=نامحدود)<input class="e-days" type="number" min="0" /></label>
           <label>حجم GB (۰=نامحدود)<input class="e-quota" type="number" min="0" step="0.5" /></label>

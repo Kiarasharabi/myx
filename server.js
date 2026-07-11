@@ -129,14 +129,50 @@ const app = express();
 app.use(express.json({ limit: '128kb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+const effectivePassword = () => state.adminPassword || ADMIN_PASSWORD;
+
 function auth(req, res, next) {
-  if ((req.headers['x-admin-token'] || '') !== ADMIN_PASSWORD) return res.status(401).json({ error: 'دسترسی غیرمجاز' });
+  if ((req.headers['x-admin-token'] || '') !== effectivePassword()) return res.status(401).json({ error: 'دسترسی غیرمجاز' });
   next();
 }
 
 app.post('/api/login', (req, res) => {
-  if ((req.body && req.body.password) !== ADMIN_PASSWORD) return res.status(401).json({ error: 'رمز اشتباه است' });
-  res.json({ token: ADMIN_PASSWORD });
+  if ((req.body && req.body.password) !== effectivePassword()) return res.status(401).json({ error: 'رمز اشتباه است' });
+  res.json({ token: effectivePassword() });
+});
+
+// تغییر رمز پنل (در state ذخیره می‌شود)
+app.post('/api/password', auth, (req, res) => {
+  const np = ((req.body && req.body.newPassword) || '').toString();
+  if (np.length < 4) return res.status(400).json({ error: 'رمز باید حداقل ۴ کاراکتر باشد' });
+  state.adminPassword = np;
+  saveState(state);
+  res.json({ token: np });
+});
+
+// چرخش مسیر مخفی WS (همه‌ی کانفیگ‌ها باطل می‌شوند)
+app.post('/api/wspath', auth, (req, res) => {
+  state.wsPath = '/' + crypto.randomBytes(6).toString('hex');
+  saveState(state);
+  res.json({ wsPath: state.wsPath });
+  rebuild();
+});
+
+// پشتیبان‌گیری و بازیابی
+app.get('/api/backup', auth, (req, res) => {
+  res.set('Content-Type', 'application/json; charset=utf-8');
+  res.set('Content-Disposition', 'attachment; filename="myx-backup.json"');
+  res.send(JSON.stringify({ wsPath: state.wsPath, users: state.users }, null, 2));
+});
+app.post('/api/restore', auth, (req, res) => {
+  const d = req.body && req.body.data;
+  if (!d || !Array.isArray(d.users)) return res.status(400).json({ error: 'فایل بکاپ نامعتبر است' });
+  state.users = d.users.map(normalizeUser);
+  if (d.wsPath) state.wsPath = d.wsPath;
+  if (!state.users.length) state.users.push(normalizeUser({ name: 'default' }));
+  saveState(state);
+  res.json({ ok: true, count: state.users.length });
+  rebuild();
 });
 
 app.get('/api/state', auth, (req, res) => {
@@ -169,11 +205,26 @@ app.patch('/api/users/:id', auth, (req, res) => {
     const q = Number(b.quotaGB) || 0;
     u.quotaBytes = q > 0 ? Math.round(q * GB) : 0;
   }
+  if (b.extendDays) {
+    const d = Number(b.extendDays) || 0;
+    if (d > 0) u.expireAt = Math.max(Date.now(), u.expireAt || Date.now()) + d * DAY;
+  }
+  if (b.addQuotaGB) {
+    const q = Number(b.addQuotaGB) || 0;
+    if (q > 0) u.quotaBytes = (u.quotaBytes || 0) + Math.round(q * GB);
+  }
+  if (b.regenUuid) u.uuid = crypto.randomUUID();
   if (b.resetUsage) {
     u.usedBytes = 0;
     u.baseSession = sessionBytes.get(u.id) || 0;
   }
   if (b.enabled !== undefined) u.enabled = !!b.enabled;
+  // اگر کاربر دیگر منقضی یا پرمصرف نیست، فعالش کن (مگر اینکه صریحاً غیرفعال شده باشد)
+  if (b.enabled !== false) {
+    const expired = u.expireAt && Date.now() > u.expireAt;
+    const over = u.quotaBytes && usedOf(u) >= u.quotaBytes;
+    if (!expired && !over) u.enabled = true;
+  }
   saveState(state);
   res.json(pubUser(u, req));
   rebuild();
