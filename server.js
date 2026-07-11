@@ -224,7 +224,7 @@ server.on('upgrade', (req, socket, head) => {
 
 server.listen(xray.PUBLIC_PORT, '0.0.0.0', () => {
   console.log('====================================================');
-  console.log(` myx روی پورت ${xray.PUBLIC_PORT} بالا آمد`);
+  console.log(` MYX-PANEL روی پورت ${xray.PUBLIC_PORT} بالا آمد`);
   console.log(` رمز ورود پنل (ADMIN PASSWORD): ${ADMIN_PASSWORD}`);
   console.log('====================================================');
 });
