@@ -11,11 +11,12 @@
   <div class="bg"></div>
   <div class="orb orb-b"></div>
   <div class="orb orb-r"></div>
+  <div class="orb orb-b2"></div>
 
   <!-- ورود -->
   <div class="view login-view" id="loginView">
-    <div class="card login-box">
-      <div class="logo-badge">◆</div>
+    <div class="card glow-card login-box">
+      <div class="logo-badge big">◆</div>
       <h1 class="login-title">MYX-PANEL</h1>
       <p class="muted center">پنل مدیریت کانفیگ</p>
       <div class="input-group">
@@ -28,89 +29,99 @@
     </div>
   </div>
 
-  <!-- داشبورد -->
-  <div class="view dash-view hidden" id="dashView">
-    <header class="card app-header">
-      <div class="brand">
-        <span class="logo-badge sm">◆</span>
-        <div class="brand-txt"><b>MYX-PANEL</b><small>VLESS · WS · TLS</small></div>
+  <!-- اپ -->
+  <div class="app hidden" id="dashView">
+    <!-- سایدبار -->
+    <aside class="sidebar" id="sidebar">
+      <div class="side-brand"><span class="logo-badge sm">◆</span><b>MYX-PANEL</b></div>
+      <nav class="side-nav">
+        <button class="nav-item active" data-page="dash"><span class="ni">📊</span> داشبورد</button>
+        <button class="nav-item" data-page="users"><span class="ni">👥</span> کاربران</button>
+        <button class="nav-item" data-page="settings"><span class="ni">⚙️</span> تنظیمات</button>
+      </nav>
+      <div class="side-foot">
+        <button class="icon-btn" id="themeBtn" title="تم">🌙</button>
+        <button class="btn-ghost grow" id="logoutBtn">خروج ⎋</button>
       </div>
-      <div class="header-actions">
-        <button class="icon-btn" id="themeBtn" title="تغییر تم">🌙</button>
-        <button class="icon-btn" id="toolsBtn" title="ابزارها">⚙️</button>
-        <button class="btn-ghost" id="logoutBtn">خروج</button>
-      </div>
-    </header>
+    </aside>
+    <div class="scrim" id="scrim"></div>
 
-    <main class="dash-main">
-      <section class="card hero">
-        <div class="hero-status">
-          <span class="pulse"></span>
-          <div><div class="muted sm-label">وضعیت سرور</div><div class="hero-title">فعال و آماده</div></div>
+    <!-- محتوا -->
+    <div class="main">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" id="menuBtn">☰</button>
+        <div class="top-title" id="pageTitle">داشبورد</div>
+        <div class="top-right">
+          <div class="status-pill"><span class="pulse"></span> سرور فعال</div>
+          <code id="domainVal">—</code>
+          <button class="icon-btn" id="copyDomain" title="کپی دامنه">⧉</button>
         </div>
-        <div class="hero-domain">
-          <span class="muted sm-label">دامنه</span>
-          <div class="domain-row"><code id="domainVal">—</code><button class="icon-btn" id="copyDomain">⧉</button></div>
+      </header>
+
+      <!-- داشبورد -->
+      <section class="page active" id="page-dash">
+        <div class="stats">
+          <div class="card glow-card stat s-blue"><div class="stat-ic">👥</div><div><div class="stat-num" id="statUsers">0</div><div class="stat-lbl">کل کاربران</div></div></div>
+          <div class="card glow-card stat s-green"><div class="stat-ic">🟢</div><div><div class="stat-num" id="statActive">0</div><div class="stat-lbl">فعال</div></div></div>
+          <div class="card glow-card stat s-red"><div class="stat-ic">📊</div><div><div class="stat-num" id="statUsage">0</div><div class="stat-lbl">مصرف کل</div></div></div>
+          <div class="card glow-card stat s-amber"><div class="stat-ic">⛔</div><div><div class="stat-num" id="statOff">0</div><div class="stat-lbl">غیرفعال</div></div></div>
         </div>
-      </section>
 
-      <section class="stats">
-        <div class="card stat"><div class="stat-num" id="statUsers">0</div><div class="stat-lbl">کاربر</div></div>
-        <div class="card stat"><div class="stat-num" id="statActive">0</div><div class="stat-lbl">فعال</div></div>
-        <div class="card stat"><div class="stat-num" id="statUsage">0</div><div class="stat-lbl">مصرف کل</div></div>
-        <div class="card stat"><div class="stat-num">443</div><div class="stat-lbl">پورت</div></div>
-      </section>
-
-      <section class="card add-card">
-        <h2 class="section-title">➕ کاربر جدید</h2>
-        <div class="add-grid">
-          <input id="newName" placeholder="نام کاربر" />
-          <input id="newDays" type="number" min="0" placeholder="روز (۰=نامحدود)" />
-          <input id="newQuota" type="number" min="0" step="0.5" placeholder="حجم GB (۰=نامحدود)" />
-          <button class="btn-primary" id="addBtn">افزودن</button>
+        <div class="card overview">
+          <h2 class="section-title">🔥 پرمصرف‌ترین کاربران</h2>
+          <div id="overviewList" class="overview-list"></div>
+          <div class="ov-empty muted" id="ovEmpty">داده‌ای برای نمایش نیست.</div>
         </div>
       </section>
 
-      <section class="users-section">
-        <h2 class="section-title">👥 کاربران <span class="badge" id="userBadge">0</span>
-          <button class="btn-soft copy-all-sub" id="copyAllSub">📋 ساب متنی همه</button>
-        </h2>
-        <div class="toolbar">
-          <input id="search" class="search" placeholder="🔍 جستجوی کاربر..." />
-          <select id="sort" class="sort">
-            <option value="new">جدیدترین</option>
-            <option value="name">نام</option>
-            <option value="usage">بیشترین مصرف</option>
-            <option value="expiry">نزدیک‌ترین انقضا</option>
-          </select>
+      <!-- کاربران -->
+      <section class="page" id="page-users">
+        <div class="card add-card">
+          <h2 class="section-title">➕ کاربر جدید</h2>
+          <div class="add-grid">
+            <input id="newName" placeholder="نام کاربر" />
+            <input id="newDays" type="number" min="0" placeholder="روز (۰=نامحدود)" />
+            <input id="newQuota" type="number" min="0" step="0.5" placeholder="حجم GB (۰=نامحدود)" />
+            <button class="btn-primary" id="addBtn">افزودن</button>
+          </div>
         </div>
+
+        <div class="users-head">
+          <div class="toolbar">
+            <input id="search" class="search" placeholder="🔍 جستجوی کاربر..." />
+            <select id="sort" class="sort">
+              <option value="new">جدیدترین</option>
+              <option value="name">نام</option>
+              <option value="usage">بیشترین مصرف</option>
+              <option value="expiry">نزدیک‌ترین انقضا</option>
+            </select>
+            <button class="btn-soft" id="copyAllSub">📋 ساب متنی همه</button>
+          </div>
+        </div>
+
         <div class="users-grid" id="users"></div>
         <div class="empty-state hidden" id="emptyState"><div class="empty-emoji">🗂️</div>کاربری یافت نشد.</div>
       </section>
-    </main>
-    <footer class="app-footer">MYX-PANEL · پروکسی زنده روی Railway</footer>
-  </div>
 
-  <!-- مودال ابزارها -->
-  <div class="modal-overlay hidden" id="toolsModal">
-    <div class="card modal">
-      <div class="modal-head"><b>⚙️ ابزارها</b><button class="icon-btn" id="toolsClose">✕</button></div>
-      <div class="modal-body">
-        <div class="tool-sec">
-          <h3>🔑 تغییر رمز پنل</h3>
-          <div class="row2"><input id="newPass" type="password" placeholder="رمز جدید" /><button class="btn-primary" id="savePass">تغییر</button></div>
+      <!-- تنظیمات -->
+      <section class="page" id="page-settings">
+        <div class="settings-grid">
+          <div class="card tool-sec">
+            <h3>🔑 تغییر رمز پنل</h3>
+            <div class="row2"><input id="newPass" type="password" placeholder="رمز جدید" /><button class="btn-primary" id="savePass">تغییر</button></div>
+          </div>
+          <div class="card tool-sec">
+            <h3>💾 پشتیبان‌گیری</h3>
+            <div class="row2"><button class="btn-soft" id="backupBtn">⬇ دانلود بکاپ</button><button class="btn-soft" id="restoreBtn">⬆ بازیابی</button></div>
+            <input type="file" id="restoreFile" accept="application/json" hidden />
+          </div>
+          <div class="card tool-sec">
+            <h3>🔄 چرخش مسیر مخفی</h3>
+            <p class="muted small">مسیر WS عوض می‌شود و همه‌ی کانفیگ‌های فعلی باطل می‌شوند.</p>
+            <button class="btn-soft danger-btn" id="rotateBtn">ساخت مسیر جدید</button>
+          </div>
         </div>
-        <div class="tool-sec">
-          <h3>💾 پشتیبان‌گیری</h3>
-          <div class="row2"><button class="btn-soft" id="backupBtn">⬇ دانلود بکاپ</button><button class="btn-soft" id="restoreBtn">⬆ بازیابی از فایل</button></div>
-          <input type="file" id="restoreFile" accept="application/json" hidden />
-        </div>
-        <div class="tool-sec">
-          <h3>🔄 چرخش مسیر مخفی</h3>
-          <p class="muted small">با این کار مسیر WS عوض می‌شود و همه‌ی کانفیگ‌های فعلی باطل می‌شوند؛ باید دوباره از پنل گرفته شوند.</p>
-          <button class="btn-soft danger-btn" id="rotateBtn">ساخت مسیر جدید</button>
-        </div>
-      </div>
+      </section>
     </div>
   </div>
 
@@ -126,7 +137,6 @@
         </div>
         <button class="del icon-btn" title="حذف">🗑</button>
       </div>
-
       <div class="metric">
         <div class="metric-head"><span class="muted">مصرف</span><span class="usage-txt"></span></div>
         <div class="bar"><div class="bar-fill"></div></div>
@@ -135,7 +145,6 @@
         <div class="chip expiry-chip">⏳ <span class="expiry-txt"></span></div>
         <div class="chip quota-chip">📦 <span class="quota-txt"></span></div>
       </div>
-
       <div class="link-box"><code class="user-link"></code></div>
       <div class="user-actions">
         <button class="copy-link btn-soft">📋 کانفیگ</button>
@@ -146,7 +155,6 @@
         <button class="toggle-edit btn-soft">✎ ویرایش</button>
       </div>
       <div class="qr"></div>
-
       <div class="edit">
         <div class="quick-row">
           <button class="q-ext7 btn-soft">+۷ روز</button>
