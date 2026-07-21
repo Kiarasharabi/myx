@@ -1,5 +1,5 @@
 {
-  "name": "live-config-panel",
+  "name": "kia-config-panel",
   "version": "2.0.0",
   "description": "پنل کانفیگ زنده (VLESS+WS+TLS با Xray) قابل اجرا روی Railway بدون VPS جداگانه",
   "main": "server.js",
